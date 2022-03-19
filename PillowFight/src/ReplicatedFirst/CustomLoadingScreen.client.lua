@@ -1,7 +1,7 @@
 local Players = game:GetService("Players")
 local ReplicatedFirst = game:GetService("ReplicatedFirst")
+local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local TweenService = game:GetService("TweenService")
-local TeleportService = game:GetService("TeleportService")
 
 local player = Players.LocalPlayer 
 local playerGui = player:WaitForChild("PlayerGui")
@@ -63,13 +63,7 @@ local waitSecondPlayerCoroutine = coroutine.create(function()
         elseif tick() - start >= waitSecondPlayerTimeout then
             isTimeout = true
 
-            local success, _ = pcall(function()
-                TeleportService:TeleportAsync(LobbyPlaceId, { Players.LocalPlayer })
-            end)
-
-            if not success then
-                warn("Failed to teleport to lobby")
-            end
+            ReplicatedStorage.Events.TeleportPlayer:FireServer(LobbyPlaceId)
 
             if loadingGui then
                 loadingGui:Destroy()
@@ -92,7 +86,9 @@ repeat
     end
 
     task.wait()
-until #Players:GetPlayers() > 2
+until #Players:GetPlayers() >= 2
+
+isSecondPlayerJoined = true
 
 if not game:IsLoaded() then
 	game.Loaded:Wait()
