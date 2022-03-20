@@ -1,5 +1,7 @@
 local Players = game:GetService("Players")
 
+local sitAnimation = "rbxassetid://9066203817"
+
 local pad1 = workspace.Pads.Pad1
 local pad2 = workspace.Pads.Pad2
 
@@ -25,6 +27,18 @@ local function onCharacterAdded(character)
     end
 
     humanoid.AutoRotate = false
+
+    local animator = humanoid:FindFirstChildOfClass("Animator")
+
+    local animation = Instance.new("Animation")
+
+    animation.AnimationId = sitAnimation
+
+    if animator then
+        local animationTrack = animator:LoadAnimation(animation)
+
+        animationTrack:Play()
+    end
 end
 
 local function onPlayerAdded(player)
