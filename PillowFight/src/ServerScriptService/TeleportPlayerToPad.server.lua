@@ -24,8 +24,6 @@ local function onCharacterAdded(character)
         humanoidRootPart.CFrame = CFrame.lookAt(humanoidRootPart.Position, pad1.Position)
     end
 
-    humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing, false)
-
     humanoid.AutoRotate = false
 end
 

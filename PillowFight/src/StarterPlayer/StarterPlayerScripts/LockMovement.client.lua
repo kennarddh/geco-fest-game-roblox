@@ -11,6 +11,8 @@ local function onUpdate()
 	local moveVector = Vector3.new(0, moveVectorDirection.Y, moveVectorDirection.Z)
 
 	player.Character.Humanoid:Move(moveVector, true)
+
+    player.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing, false)
 end
 
 player.CharacterAdded:Wait()
