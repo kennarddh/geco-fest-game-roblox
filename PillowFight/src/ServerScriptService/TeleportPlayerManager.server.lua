@@ -8,7 +8,7 @@ local function onTeleportPlayer(playerFired, placeId)
     end)
 
     if not success then
-        warn("Teleeport Failed\nReason: " .. result)
+        warn("Teleport Failed\nReason: " .. result)
     end
 end
 
