@@ -19,11 +19,11 @@ local function onCharacterAdded(character)
     playerCount += 1
 
     if playerCount == 1 then
-        humanoidRootPart.CFrame = pad1.CFrame + Vector3.new(0, 5, 0)
-        humanoidRootPart.CFrame = CFrame.lookAt(humanoidRootPart.Position, pad2.Position)
-    else
         humanoidRootPart.CFrame = pad2.CFrame + Vector3.new(0, 5, 0)
         humanoidRootPart.CFrame = CFrame.lookAt(humanoidRootPart.Position, pad1.Position)
+    else
+        humanoidRootPart.CFrame = pad1.CFrame + Vector3.new(0, 5, 0)
+        humanoidRootPart.CFrame = CFrame.lookAt(humanoidRootPart.Position, pad2.Position)
     end
 
     humanoid.AutoRotate = false
@@ -39,6 +39,8 @@ local function onCharacterAdded(character)
 
         animationTrack:Play()
     end
+
+    character.Configuration.SpawnPad.Value = playerCount
 end
 
 local function onPlayerAdded(player)
