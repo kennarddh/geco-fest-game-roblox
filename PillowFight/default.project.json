@@ -1,5 +1,8 @@
 {
 	"name": "PillowFight",
+	"servePlaceIds": [
+		9074659360
+	],
 	"tree": {
 		"$className": "DataModel",
 		"ReplicatedFirst": {

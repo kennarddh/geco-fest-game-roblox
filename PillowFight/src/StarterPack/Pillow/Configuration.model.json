@@ -1,0 +1,12 @@
+{
+	"ClassName": "Configuration",
+	"Children": [
+		{
+			"Name": "FireRate",
+			"ClassName": "NumberValue",
+			"Properties": {
+				"Value": 0.5
+			}
+		}
+	]
+}
