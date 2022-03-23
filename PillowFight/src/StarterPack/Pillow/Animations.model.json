@@ -1,0 +1,12 @@
+{
+	"ClassName": "Folder",
+	"Children": [
+		{
+			"Name": "Hit",
+			"ClassName": "Animation",
+			"Properties": {
+                "AnimationId": "rbxassetid://9155045502"
+			}
+		}
+	]
+}

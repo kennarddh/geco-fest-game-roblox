@@ -24,7 +24,7 @@ end
 local function onUpdate()
 	local moveVectorDirection = controlModule:GetMoveVector()
 
-	if player.Character.Configuration.SpawnPad.Value == 1 then
+	if player.Character:WaitForChild("Configuration"):WaitForChild("SpawnPad").Value == 1 then
 		moveVectorDirection = Vector3.new(
 			reverseNumberPositiveNegative(moveVectorDirection.X),
 			moveVectorDirection.Y,
@@ -34,7 +34,7 @@ local function onUpdate()
 
 	local moveVector = Vector3.new(0, 0, moveVectorDirection.Z)
 
-	if player.Character.Configuration.SpawnPad.Value == 2 then
+	if player.Character:WaitForChild("Configuration"):WaitForChild("SpawnPad").Value == 2 then
 		if moveVectorDirection.Z == -1 then
 			if player:DistanceFromCharacter(otherPlayer.Character:WaitForChild('Humanoid').RootPart.Position) <= 5 then
 				moveVector = Vector3.new(0, 0, 0)

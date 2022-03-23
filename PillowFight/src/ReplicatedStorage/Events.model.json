@@ -8,6 +8,10 @@
 		{
 			"Name": "TeleportPlayer",
 			"ClassName": "RemoteEvent"
+		},
+		{
+			"Name": "ShowLoading",
+			"ClassName": "RemoteEvent"
 		}
 	]
 }

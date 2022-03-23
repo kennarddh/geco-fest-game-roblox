@@ -1,6 +1,10 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local tool: Tool = script.Parent
+
+local hitAnimation = tool:WaitForChild("Animations"):WaitForChild("Hit")
+
 local timeOfPreviousShot = 0
 
 local player = Players.LocalPlayer
@@ -17,7 +21,6 @@ for _, v in ipairs(Players:GetPlayers()) do
 	end
 end
 
-local tool: Tool = script.Parent
 
 local FireRate = tool.Configuration.FireRate.Value
 
@@ -35,11 +38,20 @@ local function onUnequipped()
 
     if humanoid then
         task.wait()
+
         humanoid:EquipTool(tool)
     end
 end
 
 local function onActivated()
+    local animator = player.Character:WaitForChild('Humanoid'):FindFirstChildOfClass("Animator")
+
+    if animator then
+        local animationTrack = animator:LoadAnimation(hitAnimation)
+
+        animationTrack:Play()
+    end
+
     if player:DistanceFromCharacter(otherPlayer.Character:WaitForChild('Humanoid').RootPart.Position) >= 6 then
         return
     end
@@ -57,7 +69,11 @@ local function onCharacterAdded(character)
     humanoid:EquipTool(tool)
 end
 
-player.CharacterAdded:Connect(onCharacterAdded)
+if player.Character then
+    onCharacterAdded(player.Character)
+else
+    player.CharacterAdded:Connect(onCharacterAdded)
+end
 
 tool.Unequipped:Connect(onUnequipped)
 tool.Activated:Connect(onActivated)
