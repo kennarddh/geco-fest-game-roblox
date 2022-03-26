@@ -2,6 +2,6 @@ local projectile = script.Parent
 
 local lifetime = projectile.Configuration.Lifetime.Value
 
-wait(lifetime)
+task.wait(lifetime)
 
 projectile:Destroy()

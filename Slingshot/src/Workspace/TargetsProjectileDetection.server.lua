@@ -68,13 +68,13 @@ local function showIndicator(target, points)
 	local offsetX = math.random(-10, 10) / 10
 	local offsetY = math.random(-10, 10) / 10
 	local offsetZ = math.random(-10, 10) / 10
-	
+
 	indicatorGui.StudsOffset = Vector3.new(offsetX, offsetY, offsetZ)
 
 	local indicatorLabel = Instance.new("TextLabel")
 
 	indicatorLabel.AnchorPoint = Vector2.new(0.5, 0.5)
-	
+
 	indicatorLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
 
 	indicatorLabel.TextScaled = true
@@ -91,11 +91,11 @@ local function showIndicator(target, points)
 	indicatorGui.Parent = target
 
 	indicatorLabel:TweenSize(UDim2.new(1, 0, 1, 0), "InOut", "Quint", 0.3)
-	
-	wait(0.3)
-	
+
+	task.wait(0.3)
+
 	local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut)
-	
+
 	local guiUpTween = TweenService:Create(indicatorGui, tweenInfo, {
 		StudsOffset = indicatorGui.StudsOffset + Vector3.new(0, 1, 0)
 	})
@@ -119,13 +119,11 @@ local function targetHit(projectile, target)
 
 	local playerFired = projectile:GetNetworkOwner()
 
-	ServerStorageSlingshotData.Points[playerFired.Name].Value += 1
+	ServerStorageSlingshotData.Points[playerFired.UserId].Value += 1
 
 	projectile:SetAttribute("AlreadyHit", true)
 
-	if ServerStorageSlingshotData.Points[playerFired.Name].Value >= requiredPointsToWin then
-		slingshotEventsFolder.RemoveProjectilePathBeam:FireClient(playerFired)
-		
+	if ServerStorageSlingshotData.Points[playerFired.UserId].Value >= requiredPointsToWin then
 		if playerFired.Backpack:FindFirstChild("Slingshot") then
 			playerFired.Backpack.Slingshot:Destroy()
 		else
@@ -134,30 +132,32 @@ local function targetHit(projectile, target)
 			end
 		end
 
-		ServerStorageData.Wins[playerFired.Name].Value += 1
+		ServerStorageData.Wins[playerFired.UserId].Value += 1
 
-		playerFired.leaderstats.Wins.Value = ServerStorageData.Wins[playerFired.Name].Value
+		playerFired.leaderstats.Wins.Value = ServerStorageData.Wins[playerFired.UserId].Value
 
-		ServerStorageSlingshotData.Points[playerFired.Name].Value = 0
-		
+		ServerStorageSlingshotData.Points[playerFired.UserId].Value = 0
 
-		ServerStorageSlingshotData.Points[playerFired.Name]:Destroy()
-		
+
+		ServerStorageSlingshotData.Points[playerFired.UserId]:Destroy()
+
+		slingshotEventsFolder.ShowLoading:FireClient(playerFired, "You Won!\nTeleporting\nTo Lobby")
+
 		TeleportService:TeleportAsync(lobbyPlaceId, { playerFired })
 	end
 
 	local showIndicatorCoroutine = coroutine.create(showIndicator)
-	
+
 	local shakePartCoroutine = coroutine.create(shakePart)
-	
-	if ServerStorageSlingshotData.Points:FindFirstChild(playerFired.Name) then
+
+	if ServerStorageSlingshotData.Points:FindFirstChild(playerFired.UserId) then
 		coroutine.resume(
 			showIndicatorCoroutine,
 			target,
-			ServerStorageSlingshotData.Points[playerFired.Name].Value
+			ServerStorageSlingshotData.Points[playerFired.UserId].Value
 		)
 	end
-	
+
 	coroutine.resume(
 		shakePartCoroutine,
 		target
@@ -167,15 +167,15 @@ end
 local function onPlayerAdded(player)
 	local points = Instance.new('IntValue')
 
-	points.Name = player.Name
+	points.Name = player.UserId
 
 	points.Parent = ServerStorageSlingshotData.Points
 end
 
 local function onPlayerRemoved(player)
-	if not ServerStorageSlingshotData.Points:FindFirstChild(player.Name) then return end
-	
-	ServerStorageSlingshotData.Points[player.Name]:Destroy()
+	if not ServerStorageSlingshotData.Points:FindFirstChild(player.UserId) then return end
+
+	ServerStorageSlingshotData.Points[player.UserId]:Destroy()
 end
 
 local function onTouch(hit, target)
@@ -189,6 +189,5 @@ for _, target in ipairs(targets:GetChildren()) do
 end
 
 Players.PlayerRemoving:Connect(onPlayerRemoved)
-
 
 Players.PlayerAdded:Connect(onPlayerAdded)

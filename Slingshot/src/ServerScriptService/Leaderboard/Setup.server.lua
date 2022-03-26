@@ -28,17 +28,17 @@ local function onPlayerAdded(player)
 	end
 
 	wins.Parent = leaderstats
-	
+
 	local winsClone = wins:Clone()
-	
-	winsClone.Name = player.Name
-	
+
+	winsClone.Name = player.UserId
+
 	winsClone.Parent = ServerStorageData.Wins
 end
 
 
 local function onPlayerRemoved(player)
-	local wins = player:WaitForChild('leaderstats'):WaitForChild('Wins')
+	local wins = ServerStorageData.Wins[player.UserId]
 
 	local getSuccess, errorMessage = pcall(function()
 		winsStore:SetAsync(player.UserId, wins.Value)
@@ -48,7 +48,7 @@ local function onPlayerRemoved(player)
 		warn(errorMessage)
 	end
 
-	ServerStorageData.Wins[player.Name]:Destroy()
+	ServerStorageData.Wins[player.UserId]:Destroy()
 end
 
 Players.PlayerRemoving:Connect(onPlayerRemoved)
